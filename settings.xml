@@ -42,31 +42,6 @@
 						<enabled>true</enabled>
 					</snapshots>
 				</repository>
-				<!-- ======================================= External repositories ======================================= -->
-				<repository>
-					<id>jboss</id>
-					<name>JBoss</name>
-					<url>https://repository.jboss.org/nexus/content/groups/public/</url>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-				</repository>
-				<repository>
-					<id>jbossthird</id>
-					<name>JBossThirdParty</name>
-					<url>https://repository.jboss.org/nexus/content/repositories/thirdparty-releases/</url>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-				</repository>
-				<repository>
-					<id>jenkins</id>
-					<name>Jenkins</name>
-					<url>https://repo.jenkins-ci.org/releases/</url>
-					<snapshots>
-						<enabled>false</enabled>
-					</snapshots>
-				</repository>
 			</repositories>
 			<pluginRepositories>
 				<pluginRepository>
