@@ -91,7 +91,7 @@ runs:
         echo MAVEN_GITHUB_TOKEN="${{ inputs.maven-github-token }}" >> $GITHUB_ENV
 
     - name: Setup JDK
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ inputs.java-version }}
         distribution: corretto
@@ -99,7 +99,7 @@ runs:
 
     - name: "[SELF_HOSTED] Install Maven"
       if: env.IS_SELF_HOSTED_RUNNER == 'true'
-      uses: stCarolas/setup-maven@v4.2  # when changing version of action, verify ext path in runner-specific step
+      uses: stCarolas/setup-maven@v4.4  # when changing version of action, verify ext path in runner-specific step
       with:
         maven-version: ${{ inputs.self-hosted-runner-maven-version }}
 
@@ -127,7 +127,7 @@ runs:
 
     - name: Restore Maven cache
       if: inputs.restore-cache == 'true'
-      uses: skjolber/maven-cache-github-action@v1
+      uses: skjolber/maven-cache-github-action@v1.1
       with:
         step: restore
 
