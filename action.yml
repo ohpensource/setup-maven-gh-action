@@ -94,7 +94,7 @@ runs:
       uses: actions/setup-java@v2
       with:
         java-version: ${{ inputs.java-version }}
-        distribution: temurin
+        distribution: corretto
         overwrite-settings: false
 
     - name: "[SELF_HOSTED] Install Maven"
