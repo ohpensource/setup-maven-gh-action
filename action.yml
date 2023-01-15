@@ -99,7 +99,7 @@ runs:
 
     - name: "[SELF_HOSTED] Install Maven"
       if: env.IS_SELF_HOSTED_RUNNER == 'true'
-      uses: stCarolas/setup-maven@v4.4  # when changing version of action, verify ext path in runner-specific step
+      uses: stCarolas/setup-maven@v4.5  # when changing version of action, verify ext path in runner-specific step
       with:
         maven-version: ${{ inputs.self-hosted-runner-maven-version }}
 
