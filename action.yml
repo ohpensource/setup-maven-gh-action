@@ -36,7 +36,7 @@ inputs:
   self-hosted-runner-maven-version:
     description: "Maven version used in self hosted runners"
     required: false
-    default: "3.8.2"
+    default: "3.8.8"
 
   maven-github-username:
     description: "Username for maven github server. E.g. used for using git from maven scm plugin."

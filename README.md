@@ -2,6 +2,7 @@
 
 * Action prepares environment for running maven project for both runners: github and selfhosted.
   * Special external Maven repositories can be configured in project main pom.xml file
+    * default maven version is **3.8.8**
   * setup AWS Corretto Java distribution
 * Includes restoring cache before build (can be disabled by restore-cache parameter).
 * Action sets AWS_REGION env variable with default: eu-west-1
