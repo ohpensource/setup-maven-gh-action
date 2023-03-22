@@ -113,7 +113,7 @@ runs:
           else
             MAVEN_EXT_PATH=${RUNNER_TOOL_CACHE}/maven/${{ inputs.self-hosted-runner-maven-version }}/x64/lib/ext
         fi
-        echo "::set-output name=maven_ext_path::${MAVEN_EXT_PATH}"
+        echo "maven_ext_path=${MAVEN_EXT_PATH}" >> $GITHUB_OUTPUT
 
     - name: Download Maven S3 repository extension
       shell: bash
@@ -127,7 +127,7 @@ runs:
 
     - name: Restore Maven cache
       if: inputs.restore-cache == 'true'
-      uses: skjolber/maven-cache-github-action@v1.1
+      uses: rbrisuda/maven-cache-github-action@node16
       with:
         step: restore
 

@@ -18,6 +18,11 @@
           account-id: <<ACCOUNT_ID>>
 ```
 
+**Note:** 
+
+This action: [https://github.com/skjolber/maven-cache-github-action] was replaced by equivalent fork with fixed
+deprecated GitHub commands and node version. If original repo action will be fixed, we can move to new version.
+
 # License Summary
 
 This code is made available under the MIT license. Details [here](LICENSE).
