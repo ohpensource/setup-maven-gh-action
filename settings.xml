@@ -83,25 +83,25 @@
 			<id>github-release</id>
 			<username>${env.MAVEN_AWS_ACCESS_KEY_ID}</username>
 			<password>${env.MAVEN_AWS_SECRET_ACCESS_KEY}</password>
-			<filePermissions>AuthenticatedRead</filePermissions>
+			<filePermissions>authenticated-read</filePermissions>
 		</server>
 		<server>
 			<id>github-snapshot</id>
 			<username>${env.MAVEN_AWS_ACCESS_KEY_ID}</username>
 			<password>${env.MAVEN_AWS_SECRET_ACCESS_KEY}</password>
-			<filePermissions>AuthenticatedRead</filePermissions>
+			<filePermissions>authenticated-read</filePermissions>
 		</server>
 		<server>
 			<id>github-plugin-release</id>
 			<username>${env.MAVEN_AWS_ACCESS_KEY_ID}</username>
 			<password>${env.MAVEN_AWS_SECRET_ACCESS_KEY}</password>
-			<filePermissions>AuthenticatedRead</filePermissions>
+			<filePermissions>authenticated-read</filePermissions>
 		</server>
 		<server>
 			<id>github-plugin-snapshot</id>
 			<username>${env.MAVEN_AWS_ACCESS_KEY_ID}</username>
 			<password>${env.MAVEN_AWS_SECRET_ACCESS_KEY}</password>
-			<filePermissions>AuthenticatedRead</filePermissions>
+			<filePermissions>authenticated-read</filePermissions>
 		</server>
 	</servers>
 </settings>
