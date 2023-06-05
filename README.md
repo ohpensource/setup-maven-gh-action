@@ -13,15 +13,11 @@
         with:
           java-version: 11
           restore-cache: false
-          maven-aws-access-key: <<AWS_ACCESS_KEY>>
+          source-aws-profile: <<SOURCE_AWS_PROFILE>>
+          maven-aws-role-to-assume: <<ROLE_TO_ASSUME>>
           maven-aws-secret-key: <<AWS_SECRET_KEY>>
-          account-id: <<ACCOUNT_ID>>
+          maven-artifacts-account-id: <<ACCOUNT_ID>>
 ```
-
-**Note:** 
-
-This action: [https://github.com/skjolber/maven-cache-github-action] was replaced by equivalent fork with fixed
-deprecated GitHub commands and node version. If original repo action will be fixed, we can move to new version.
 
 # License Summary
 
