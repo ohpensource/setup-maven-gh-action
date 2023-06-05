@@ -9,15 +9,19 @@ inputs:
     required: false
     default: "true"
 
-  maven-aws-access-key:
-    description: "Access key for credentials for accessing maven artifacts S3 repositories"
+  source-aws-profile:
+    description: "AWS profile used to assume role for accessing maven artifacts S3 repositories"
     required: true
-  maven-aws-secret-key:
-    description: "Secret key for credentials for accessing maven artifacts S3 repositories"
+  maven-aws-role-to-assume:
+    description: "Role to assume for accessing maven artifacts S3 repositories"
     required: true
-  account-id:
-    description: "Account id where maven artifacts S3 repositories exist."
+  maven-artifacts-account-id:
+    description: "Account id where maven artifacts S3 repositories exist"
     required: true
+  maven-aws-profile-name:
+    description: "Profile name for aws profile to be created."
+    required: false
+    default: maven-aws-profile
 
   maven-wagon-version:
     description: "Wagon version"
@@ -53,6 +57,9 @@ outputs:
   changed-modules:
     description: "List of changed modules evaluated from last two commits if enabled"
     value: ${{ steps.maven_changed_modules.outputs.changed_modules }}
+  maven-aws-profile:
+    description: "Aws profile used for accessing maven repositories."
+    value: ${{ inputs.maven-aws-profile-name }}
 
 runs:
   using: "composite"
@@ -62,29 +69,30 @@ runs:
       run: |
         AWS_REGION=${{ inputs.aws-region }}
         echo AWS_REGION="${AWS_REGION}" >> $GITHUB_ENV
+         
+        aws configure set role_arn ${{ inputs.maven-aws-role-to-assume }} --profile ${{ inputs.maven-aws-profile-name }}
+        aws configure set source_profile ${{ inputs.source-aws-profile }} --profile ${{ inputs.maven-aws-profile-name }}
+        aws configure set region ${AWS_REGION} --profile ${{ inputs.maven-aws-profile-name }}
 
-        sudo aws configure set aws_access_key_id ${{ inputs.maven-aws-access-key }} --profile s3-artifacts
-        sudo aws configure set aws_secret_access_key ${{ inputs.maven-aws-secret-key }} --profile s3-artifacts
-        sudo aws configure set region ${AWS_REGION} --profile s3-artifacts
+        echo MAVEN_AWS_PROFILE="${{ inputs.maven-aws-profile-name }}" >> $GITHUB_ENV
 
-        echo MAVEN_AWS_ACCESS_KEY_ID="${{ inputs.maven-aws-access-key }}" >> $GITHUB_ENV
-        echo MAVEN_AWS_SECRET_ACCESS_KEY="${{ inputs.maven-aws-secret-key }}" >> $GITHUB_ENV
+        MAVEN_SNAPSHOT_URL="s3://maven-snapshot-repository-${{ inputs.maven-artifacts-account-id }}"
+        echo MAVEN_SNAPSHOT_URL="${MAVEN_SNAPSHOT_URL}" >> $GITHUB_ENV
 
-        echo MAVEN_SNAPSHOT_URL="s3://maven-snapshot-repository-${{ inputs.account-id }}" >> $GITHUB_ENV
-
-        MAVEN_RELEASE_URL="s3://maven-release-repository-${{ inputs.account-id }}"
+        MAVEN_RELEASE_URL="s3://maven-release-repository-${{ inputs.maven-artifacts-account-id }}"
         echo MAVEN_RELEASE_URL="${MAVEN_RELEASE_URL}" >> $GITHUB_ENV
         
-        echo MAVEN_WAGON_PATH="${MAVEN_RELEASE_URL}/com/ohpen/maven/s3-wagon/${{ inputs.maven-wagon-version }}/s3-wagon-${{ inputs.maven-wagon-version }}-jar-with-dependencies.jar" >> $GITHUB_ENV
-      
-        echo DOCKER_REGISTRY="${{ inputs.account-id }}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> $GITHUB_ENV
+        # echo MAVEN_WAGON_PATH="${MAVEN_RELEASE_URL}/com/ohpen/maven/s3-wagon/${{ inputs.maven-wagon-version }}/s3-wagon-${{ inputs.maven-wagon-version }}-jar-with-dependencies.jar" >> $GITHUB_ENV
+        echo MAVEN_WAGON_PATH="${MAVEN_SNAPSHOT_URL}/com/ohpen/maven/s3-wagon/1.0.5-SNAPSHOT/s3-wagon-${{ inputs.maven-wagon-version }}-jar-with-dependencies.jar" >> $GITHUB_ENV
+        
+        echo DOCKER_REGISTRY="${{ inputs.maven-artifacts-account-id }}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> $GITHUB_ENV
         
         IS_SELF_HOSTED_RUNNER="false"
         if [[ "$USER" == "ec2-user" ]];
           then
             IS_SELF_HOSTED_RUNNER="true"
         fi
-                
+        
         echo IS_SELF_HOSTED_RUNNER="${IS_SELF_HOSTED_RUNNER}" >> $GITHUB_ENV
 
         echo MAVEN_GITHUB_USERNAME="${{ inputs.maven-github-username }}" >> $GITHUB_ENV
@@ -118,8 +126,9 @@ runs:
     - name: Download Maven S3 repository extension
       shell: bash
       run: |
-        
-        sudo aws s3 cp ${{ env.MAVEN_WAGON_PATH }} ${{ steps.runner-specific.outputs.maven_ext_path }} --profile s3-artifacts
+        TMP_WAGON_PATH="/tmp/s3-wagon-${{ inputs.maven-wagon-version }}-jar-with-dependencies.jar"
+        aws s3 cp ${{ env.MAVEN_WAGON_PATH }} $TMP_WAGON_PATH --profile ${{ inputs.maven-aws-profile-name }}
+        sudo cp $TMP_WAGON_PATH ${{ steps.runner-specific.outputs.maven_ext_path }}
 
     - name: Setup Maven settings
       shell: bash
