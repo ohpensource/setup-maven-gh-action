@@ -59,18 +59,17 @@ outputs:
     value: ${{ steps.maven_changed_modules.outputs.changed_modules }}
   maven-aws-profile:
     description: "Aws profile used for accessing maven repositories."
-    value: ${{ steps.configure-maven-aws-profile.outputs.aws-profile }}
+    value: ${{ inputs.maven-aws-profile-name }}
 
 runs:
   using: "composite"
   steps:
     - name: Configure maven aws profile
-      id: configure-maven-aws-profile
-      uses: ohpensource/configure-aws-credentials-profile-action@main
-      with:
-        aws-profile-name: ${{ inputs.maven-aws-profile-name }}
-        role-to-assume: ${{ inputs.maven-aws-role-to-assume }}
-        aws-source-profile: ${{ inputs.source-aws-profile }}
+      shell: bash
+      run: |
+        aws configure set role_arn ${{ inputs.maven-aws-role-to-assume }} --profile ${{ inputs.maven-aws-profile-name }}
+        aws configure set source_profile ${{ inputs.source-aws-profile }} --profile ${{ inputs.maven-aws-profile-name }} 
+        aws configure set region ${{ inputs.aws-region }} --profile ${{ inputs.maven-aws-profile-name }}  
 
     - name: Setup maven artifact repository inputs
       shell: bash
@@ -130,7 +129,7 @@ runs:
       shell: bash
       run: |
         TMP_WAGON_PATH="/tmp/s3-wagon-${{ inputs.maven-wagon-version }}-jar-with-dependencies.jar"
-        aws s3 cp ${{ env.MAVEN_WAGON_PATH }} $TMP_WAGON_PATH --profile ${{ steps.configure-maven-aws-profile.outputs.aws-profile }}
+        aws s3 cp ${{ env.MAVEN_WAGON_PATH }} $TMP_WAGON_PATH --profile ${{ inputs.maven-aws-profile-name }} 
         
         sudo cp $TMP_WAGON_PATH ${{ steps.runner-specific.outputs.maven_ext_path }}
 
