@@ -19,7 +19,7 @@ inputs:
     description: "Account id where maven artifacts S3 repositories exist"
     required: true
   maven-aws-profile-name:
-    description: "Profile name for aws profile to be created."
+    description: "Profile name for aws profile to be created"
     required: false
     default: "maven-aws-profile"
 
@@ -43,13 +43,13 @@ inputs:
     default: "3.8.8"
 
   maven-github-username:
-    description: "Username for maven github server. E.g. used for using git from maven scm plugin."
+    description: "Username for maven github server. E.g. used for using git from maven scm plugin"
     required: false
   maven-github-token:
-    description: "Token for maven github server. E.g. used for using git from maven scm plugin."
+    description: "Token for maven github server. E.g. used for using git from maven scm plugin"
     required: false
   aws-region:
-    description: "Aws region associated with workflow."
+    description: "Aws region associated with workflow"
     required: false
     default: "eu-west-1"
 
@@ -58,7 +58,7 @@ outputs:
     description: "List of changed modules evaluated from last two commits if enabled"
     value: ${{ steps.maven_changed_modules.outputs.changed_modules }}
   maven-aws-profile:
-    description: "Aws profile used for accessing maven repositories."
+    description: "Created aws profile used for accessing maven repositories"
     value: ${{ inputs.maven-aws-profile-name }}
 
 runs:
