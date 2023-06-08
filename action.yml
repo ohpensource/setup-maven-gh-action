@@ -64,6 +64,7 @@ outputs:
 runs:
   using: "composite"
   steps:
+
     - name: Configure maven aws profile
       shell: bash
       run: |
