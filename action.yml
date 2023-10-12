@@ -90,10 +90,10 @@ runs:
         
         echo DOCKER_REGISTRY="${{ inputs.maven-artifacts-account-id }}.dkr.ecr.${AWS_REGION}.amazonaws.com" >> $GITHUB_ENV
         
-        IS_SELF_HOSTED_RUNNER="false"
-        if [[ "$USER" == "ec2-user" ]];
-          then
-            IS_SELF_HOSTED_RUNNER="true"
+        IS_SELF_HOSTED_RUNNER="true"
+
+        if [[ "${{ runner.name }}" =~ ^GitHub\ Actions.* ]]; then
+            IS_SELF_HOSTED_RUNNER="false"
         fi
         
         echo IS_SELF_HOSTED_RUNNER="${IS_SELF_HOSTED_RUNNER}" >> $GITHUB_ENV
